@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import FormErrors from "../FormErrors";
 import Validate from "../util/Validation";
-import {Auth} from 'aws-amplify';
+import { Auth } from "aws-amplify";
 
 class LogIn extends Component {
   state = {
@@ -25,7 +25,7 @@ class LogIn extends Component {
   handleSubmit = async event => {
     //Prevent page reload
     event.preventDefault();
-    
+
     //Form validation
     this.clearErrors();
     const error = Validate(event, this.state);
@@ -35,19 +35,16 @@ class LogIn extends Component {
       });
     }
     //Integrate Cognito here on valid form submission
-    //Take the state variables to pass to the signUp method
-    //we added email as a required field and this needs to be
-    //passed to the api as an attribute.
     try {
       const user = await Auth.signIn(this.state.username, this.state.password);
       console.log(user);
-      //redirect to Welcome page if registration is successful
+      this.props.auth.authenticateUser(true);
+      this.props.auth.setAuthUser(user);
       this.props.history.push("/");
-    } catch (error){
-      //check if error has a message property, if not add one.
+    } catch (error) {
       let err = null;
-      !error.message ? err= {"message": error } : err = error;
-      //set form error as a cognito error
+      !error.message ? (err = { message: error }) : (err = error);
+
       this.setState({
         errors: {
           ...this.state.errors,
@@ -55,26 +52,14 @@ class LogIn extends Component {
         }
       });
     }
-
   };
-
-  clearErrors = () => {
-    this.setState({
-      errors: {
-        blankfield: false,
-        cognito: null
-      }
-    });
-  };
-
-
 
   onInputChange = event => {
     this.setState({
       [event.target.id]: event.target.value
     });
     document.getElementById(event.target.id).classList.remove("is-danger");
-  }
+  };
 
   render() {
     return (
@@ -86,8 +71,8 @@ class LogIn extends Component {
           <form onSubmit={this.handleSubmit}>
             <div className="field">
               <p className="control has-icons-left">
-                <input 
-                  className="input" 
+                <input
+                  className="input"
                   type="text"
                   id="username"
                   placeholder="Enter username or email"
@@ -101,8 +86,8 @@ class LogIn extends Component {
             </div>
             <div className="field">
               <p className="control has-icons-left">
-                <input 
-                  className="input" 
+                <input
+                  className="input"
                   type="password"
                   id="password"
                   placeholder="Password"
@@ -121,9 +106,7 @@ class LogIn extends Component {
             </div>
             <div className="field">
               <p className="control">
-                <button className="button is-success">
-                  Login
-                </button>
+                <button className="button is-success">Login</button>
               </p>
             </div>
           </form>
@@ -134,3 +117,4 @@ class LogIn extends Component {
 }
 
 export default LogIn;
+
