@@ -39,7 +39,7 @@ class Register extends Component {
       this.setState({
         errors: { ...this.state.errors, ...error }
       });
-    }
+    } else {
     //Integrate Cognito here on valid form submission
     const {username, email, password} = this.state;
 
@@ -66,6 +66,7 @@ class Register extends Component {
         }
       });
     }
+  }
 
   };
 

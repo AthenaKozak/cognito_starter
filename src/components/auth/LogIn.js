@@ -33,7 +33,7 @@ class LogIn extends Component {
       this.setState({
         errors: { ...this.state.errors, ...error }
       });
-    }
+    } else {
     //Integrate Cognito here on valid form submission
     try {
       const user = await Auth.signIn(this.state.username, this.state.password);
@@ -52,6 +52,7 @@ class LogIn extends Component {
         }
       });
     }
+  }
   };
 
   onInputChange = event => {

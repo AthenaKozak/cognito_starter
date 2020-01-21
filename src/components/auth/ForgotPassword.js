@@ -32,7 +32,7 @@ class ForgotPassword extends Component {
       this.setState({
         errors: { ...this.state.errors, ...error }
       });
-    }
+    } else {
     //Integrate Cognito here on valid form submission
     try {
       await Auth.forgotPassword(this.state.email);
@@ -48,6 +48,7 @@ class ForgotPassword extends Component {
         }
       });
     }
+}
   };
 
   onInputChange = event => {
